@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
-from accounts.models import CustomUser
+from accounts.models import User
 from django.contrib.auth.admin import UserAdmin
 
 
@@ -24,4 +24,4 @@ class UserAdminConfig(UserAdmin):
     search_fields = ('first_name', 'last_name', 'email')
     list_filter = ('is_staff', 'is_artist', 'is_superuser', 'is_active', 'groups')
 
-admin.site.register(CustomUser, UserAdminConfig)
+admin.site.register(User, UserAdminConfig)

@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %} English Songs {% endblock title %}
+{% block body %}
+{% include 'nav.html' %}
+
+<br>
+<!-- English Songs -->
+<div class="container">
+    {% include 'search.html' %}
+    {% if not query_search %}
+        <header class="section-heading">
+            <h5 class="section-title">ENGLISH SONGS</h5>
+        </header>
+    {% else %}
+        <header class="section-heading">
+            <h5 class="section-title">SEARCH RESULTS</h5>
+        </header>
+    {% endif %}
+    <hr>
+  <!-- Song list -->
+  <div class="row" style="margin-right: 65px;margin-left:-15px">
+    {% if english_songs %}
+    {% for song in english_songs %}
+    <div class="col-sm-2 col-md-2" style="padding-bottom: 15px;">
+      <div class="hovereffect">
+        <img src="{{ song.thumbnail.url}}" class="img-responsive" height="135" width="135"
+          style="border-radius: 8px 8px 8px 8px;">
+        <div class="overlay">
+          <a class="btn btn-outline-light mt-5 mx-1" href="{% url 'detail' song.id %}"><i class="fa fa-info-circle"
+              aria-hidden="true"></i></a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+  </div>
+</div>
+
+
+{% endblock body %}

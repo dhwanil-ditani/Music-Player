@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 
-class CustomUserManager(BaseUserManager):
+class UserManager(BaseUserManager):
 
     def create_user(self, email, password, **other_fields):
 
@@ -35,7 +35,7 @@ class CustomUserManager(BaseUserManager):
 
         return self.create_user(email, password, **other_fields)
 
-class CustomUser(AbstractBaseUser, PermissionsMixin):
+class User(AbstractBaseUser, PermissionsMixin):
     
     email = models.EmailField(_('Email Address'), max_length=255, unique=True)
     first_name = models.CharField(_('First Name'), max_length=255, blank=True, null=True)
@@ -50,7 +50,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     EMAIL_FIELD = 'email'
     REQUIRED_FIELD = []
 
-    objects = CustomUserManager()
+    objects = UserManager()
 
     def __str__(self):
         return self.email

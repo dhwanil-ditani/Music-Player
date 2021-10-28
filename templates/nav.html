@@ -1,0 +1,36 @@
+<nav class="navbar navbar-expand-sm navbar-light bg-light">
+    <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#collapsibleNavId">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="collapsibleNavId">
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'home' %}">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'all_songs' %}">All Songs</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'playlist' %}">PlayList</a>
+            </li>
+            <li class="nav-item">
+                <a href="{% url 'favourite' %}" class="nav-link">Favourite</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav">
+            {% if user.is_authenticated %}
+                <span class='navbar-text'>Welcome {{ user.email }}</span>
+                <li>
+                    <a class="nav-link" href="/accounts/logout">Logout</a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/accounts/login">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/accounts/signup">SignUp</a>
+                </li>
+            {% endif %} 
+        </ul>
+    </div>
+</nav>
