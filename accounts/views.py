@@ -23,7 +23,7 @@ class SignupView(CreateView):
         email = self.object
         current_site = get_current_site(self.request)
         email_subject = "Confirm your Email"
-        message2 = render_to_string('email_confirmation.html', {
+        message2 = render_to_string('accounts/email_confirmation.html', {
             'name': email,
             'domain': current_site.domain,
             'uid': urlsafe_base64_encode(force_bytes(self.object.pk)),

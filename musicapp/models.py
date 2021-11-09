@@ -2,15 +2,15 @@ from django.utils import timezone
 from django.db import models
 from accounts.models import User
 
-class Song(models.Model):
 
+class Song(models.Model):
     Language_Choice = (
-              ('Hindi', 'Hindi'),
-              ('English', 'English'),
-            )
+        ('Hindi', 'Hindi'),
+        ('English', 'English'),
+    )
     name = models.CharField(max_length=200)
     album = models.CharField(max_length=200)
-    language = models.CharField(max_length=20,choices=Language_Choice,default='Hindi')
+    language = models.CharField(max_length=20, choices=Language_Choice, default='Hindi')
     year = models.IntegerField()
     artist = models.CharField(max_length=200)
     song_file = models.FileField(upload_to='music/')
@@ -19,6 +19,7 @@ class Song(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class Playlist(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
