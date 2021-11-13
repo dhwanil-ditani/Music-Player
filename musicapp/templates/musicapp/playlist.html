@@ -1,36 +1,31 @@
 {% extends 'base.html' %}
 {% block title %} Playlist {% endblock title %}
 {% block body %}
-{% load static %}
-{% include 'nav.html' %}
+    {% load static %}
+    {% include 'nav.html' %}
 
-<br>
-<div class="container">
+    <br>
+    <div class="container">
 
-  <header class="section-heading">
-    <h3 class="section-title">All Playlists</h3>
-  </header><!-- sect-heading -->
-  <hr>
-  <!-- Movie list -->
-  <div class="row">
-    {% if playlists %}
-    {% for playlist in playlists %}
-    <div class="col-md-3">
-      <div class="thumbnail">
-        <a href="{% url 'playlist_songs' playlist.name %}">
-          <img src="{% static 'musicapp/images/bg.jpg' %}" class="img-responsive" height="200" width="200">
-        </a>
-        <center>
-          <h4 style="margin-left:-50px">{{playlist.playlist_name}}</h4>
-        </center>
-      </div>
+        <header class="section-heading">
+            <h3 class="section-title">All Playlists</h3>
+        </header><!-- sect-heading -->
+        <hr>
+        <!-- Movie list -->
+        <div class="row">
+            {% if playlists %}
+                {% for playlist in playlists %}
+                    <div class="container p-3 my-3 text-white" style="background-color: #F9F9F9;">
+                        <a href="{% url 'playlist_songs' playlist.name %}">
+                            <h1 style="color: black;">{{ playlist.name }}</h1>
+                        </a> <a href="{% url 'playlist_songs' playlist.name %}">
+                        <p style="color: black;">Browse through your created playlist here.</p></a></div>
+                {% endfor %}
+            {% else %}
+                <p>There isn't any playlist! First create new playlist.</p>
+            {% endif %}
+        </div>
+
     </div>
-    {% endfor %}
-    {% else %}
-    <p>There isn't any playlist! First create new playlist.</p>
-    {% endif %}
-  </div>
-
-</div>
-<!-- {% include 'footer.html' %} -->
+    <!-- {% include 'footer.html' %} -->
 {% endblock body %}

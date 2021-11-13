@@ -12,9 +12,62 @@ def index(request):
     all_artists = sorted(list(set([s.strip() for artist in s_list for s in artist])))
     qs_languages = Song.objects.values_list('language').all()
     all_languages = sorted(list(set([l.strip() for lang in qs_languages for l in lang])))
+
+    # Display recent songs
+    if not request.user.is_anonymous:
+        recent = list(Recent.objects.filter(user=request.user).values('song_id').order_by('-id'))
+        recent_id = [each['song_id'] for each in recent][:5]
+        recent_songs_unsorted = Song.objects.filter(id__in=recent_id, recent__user=request.user)
+        recent_songs = list()
+        for id in recent_id:
+            recent_songs.append(recent_songs_unsorted.get(id=id))
+    else:
+        recent = None
+        recent_songs = None
+
+    first_time = False
+
+    if not request.user.is_anonymous:
+        last_played_list = list(Recent.objects.filter(user=request.user).values('song_id').order_by('-id'))
+        if last_played_list:
+            last_played_id = last_played_list[0]['song_id']
+            last_played_song = Song.objects.get(id=last_played_id)
+        else:
+            first_time = True
+            last_played_song = False
+
+    else:
+        first_time = True
+        last_played_song = False
+
+    # Display all songs
+    songs = Song.objects.all()
+
+    # Display few songs on home page
+    songs_all = list(Song.objects.all().values('id').order_by('?'))
+    sliced_ids = [each['id'] for each in songs_all][:6]
+    indexpage_songs = Song.objects.filter(id__in=sliced_ids)
+
+    # Display Hindi Songs
+    songs_hindi = list(Song.objects.filter(language='Hindi').values('id'))
+    sliced_ids = [each['id'] for each in songs_hindi][:6]
+    indexpage_hindi_songs = Song.objects.filter(id__in=sliced_ids)
+
+    # Display English Songs
+    songs_english = list(Song.objects.filter(language='English').values('id'))
+    sliced_ids = [each['id'] for each in songs_english][:6]
+    indexpage_english_songs = Song.objects.filter(id__in=sliced_ids)
     context = {
         'all_artists': all_artists,
-        'all_languages': all_languages
+        'all_languages': all_languages,
+        'all_songs': indexpage_songs,
+        'recent_songs': recent_songs,
+        'hindi_songs': indexpage_hindi_songs,
+        'english_songs': indexpage_english_songs,
+        'last_played': last_played_song,
+        'first_time': first_time,
+        'query_search': False,
+
     }
     return render(request, 'musicapp/index.html', context=context)
 
@@ -49,6 +102,13 @@ def all_songs(request):
 
 def hindi_songs(request):
     context = {}
+    # Last played song
+    last_played_list = list(Recent.objects.values('song_id').order_by('-id'))
+    if last_played_list:
+        last_played_id = last_played_list[0]['song_id']
+        last_played_song = Song.objects.get(id=last_played_id)
+    else:
+        last_played_song = False
     query = request.GET.get('q')
     if query:
         hindi_songs = Song.objects.filter(Q(name__icontains=query)).distinct()
@@ -62,11 +122,19 @@ def hindi_songs(request):
     context['hindi_songs'] = hindi_songs
     context['all_artists'] = all_artists
     context['all_languages'] = ['Hindi']
-    return render(request, 'musicapp/english_songs.html', context=context)
+    context['last_played'] = last_played_song
+    return render(request, 'musicapp/hindi_songs.html', context=context)
 
 
 def english_songs(request):
     context = {}
+    # Last played song
+    last_played_list = list(Recent.objects.values('song_id').order_by('-id'))
+    if last_played_list:
+        last_played_id = last_played_list[0]['song_id']
+        last_played_song = Song.objects.get(id=last_played_id)
+    else:
+        last_played_song = False
     query = request.GET.get('q')
     if query:
         english_songs = Song.objects.filter(Q(name__icontains=query)).distinct()
@@ -80,6 +148,7 @@ def english_songs(request):
     context['english_songs'] = english_songs
     context['all_artists'] = all_artists
     context['all_languages'] = ['English']
+    context['last_played'] = last_played_song
     return render(request, 'musicapp/english_songs.html', context=context)
 
 
@@ -102,7 +171,7 @@ def play_song_index(request, song_id):
         data.delete()
     data = Recent(song=songs, user=request.user)
     data.save()
-    return redirect('Home')
+    return redirect('home')
 
 
 @login_required(login_url='login')
@@ -182,7 +251,7 @@ def detail(request, song_id):
     if request.method == "POST":
         if 'playlist' in request.POST:
             playlist_name = request.POST["playlist"]
-            q = Playlist(user=request.user, song=songs, playlist_name=playlist_name)
+            q = Playlist(user=request.user, song=songs, name=playlist_name)
             q.save()
             messages.success(request, "Song added to playlist!")
         elif 'add-fav' in request.POST:

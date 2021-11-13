@@ -5,36 +5,127 @@
         left: 50%;
         width: 90px;
         height: 90px;
-        margin:-60px 0 0 -60px;
-        -webkit-animation:spin 4s linear infinite;
-        -moz-animation:spin 4s linear infinite;
-        animation:spin 4s linear infinite;
+        margin: -60px 0 0 -40px;
+        -webkit-animation: spin 4s linear infinite;
+        -moz-animation: spin 4s linear infinite;
+        animation: spin 4s linear infinite;
     }
-    @-moz-keyframes spin { 
-        100% { -moz-transform: rotate(360deg); } 
+
+    @-moz-keyframes spin {
+        100% {
+            -moz-transform: rotate(360deg);
+        }
     }
-    @-webkit-keyframes spin { 
-        100% { -webkit-transform: rotate(360deg); } 
+
+    @-webkit-keyframes spin {
+        100% {
+            -webkit-transform: rotate(360deg);
+        }
     }
-    @keyframes spin { 
-        100% { 
-            -webkit-transform: rotate(360deg); 
-            transform:rotate(360deg); 
-        } 
+
+    @keyframes spin {
+        100% {
+            -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+        }
+    }
+
+    body .player {
+        z-index: 10;
+        background: #F9F9F9;
+        color: #000;
+        min-height: 80px;
+        max-height: 150px;
+        height: 110px;
+        display: -webkit-box;
+        display: flex;
+        -webkit-box-orient: horizontal;
+        -webkit-box-direction: normal;
+        flex-direction: row;
+    }
+
+    body .player .left {
+        width: 80px;
+        background-image: none;
+        background-size: cover;
+    }
+
+    body .player .right {
+        -webkit-box-flex: 1;
+        flex-grow: 1;
+        display: -webkit-box;
+        display: flex;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        flex-direction: column;
+    }
+
+    body .player .right .top {
+        -webkit-box-flex: 1;
+        flex-grow: 1;
+        display: -webkit-box;
+        display: flex;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        flex-direction: column;
+        -webkit-box-pack: center;
+        justify-content: center;
+        padding-left: 10px;
+    }
+
+    body .player .right .top .song {
+        font-size: 1.2em;
+        font-weight: 600;
+    }
+
+    body .player .right .bottom {
+        display: -webkit-box;
+        display: flex;
+    }
+
+    body .player .right .bottom video {
+        -webkit-box-flex: 1;
+        flex-grow: 1;
+        height: 32px;
+    }
+
+    @-webkit-keyframes pop-in {
+        0%, 95% {
+            -webkit-transform: translateY(100%);
+            transform: translateY(100%);
+        }
+        100% {
+            -webkit-transform: translateY(0%);
+            transform: translateY(0%);
+        }
+    }
+
+    @keyframes pop-in {
+        0%, 95% {
+            -webkit-transform: translateY(100%);
+            transform: translateY(100%);
+        }
+        100% {
+            -webkit-transform: translateY(0%);
+            transform: translateY(0%);
+        }
     }
 </style>
 <footer class="footer">
     <div class="player" style="padding-left: 10px;padding-top:10px;background-color: oldlace ;">
-        <div class="left"><img src="{{song.thumbnail.url}}" class="image" style="border-radius: 50%; "></div>
-            <div class="right">
-                <div class="top">
-                    <span class="song" style="margin-left: 15px;color: black;">{{song.name}}</span>
-                    <span class="artist" style="margin-left: 15px;color:black">{{song.album}}</span>
-                </div>
-                <div class="bottom">
-                    <audio controls=""  name="media" style="margin-left: 20px;margin-bottom: 10px;width: 1230px;height:30px"><source src="{{song.song_file.url}}" type="audio/mpeg" ></audio>
-                </div>
+        <div class="left"><img src="{{ song.thumbnail.url }}" class="image" style="border-radius: 50%; "></div>
+        <div class="right">
+            <div class="top">
+                <span class="song" style="margin-left: 15px;color: black;">{{ song.name }}</span>
+                <span class="artist" style="margin-left: 15px;color:black">{{ song.album }}</span>
+            </div>
+            <div class="bottom">
+                <audio controls="" name="media" style="margin-left: 20px;margin-bottom: 10px;width: 1230px;height:30px">
+                    <source src="{{ song.song_file.url }}" type="audio/mpeg">
+                </audio>
             </div>
         </div>
+    </div>
+
     </div>
 </footer>

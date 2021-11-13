@@ -1,42 +1,45 @@
 {% extends 'base.html' %}
 {% block title %} All Songs {% endblock title %}
 {% block body %}
-{% include 'nav.html' %}
-<br>
-<div class="container" style="padding-bottom: 150px;">
-    {% include 'search.html' %}
-    {% if not query_search %}
-        <header class="section-heading">
-            <h5 class="section-title">ALL SONGS</h5>
-        </header>
-        <hr>
-    {% else %}
-        <header class="section-heading">
-            <h5 class="section-title">SEARCH RESULTS</h5>
-        </header>
-        <hr>
-    {% endif %}
-    
-    <!-- Song list -->
-    <div class="row" style="margin-right: 65px;margin-left:-15px;">
-        {% if songs %}
-        {% for song in songs %}
-        <div class="col-sm-2 col-md-2" style="padding-bottom: 15px;">
-            <div class="hovereffect">
-                <img src="{{ song.thumbnail.url}}" class="img-responsive" height="135" width="135" style="border-radius: 8px 8px 8px 8px;">
-                <div class="overlay">
-                    <a class="btn btn-outline-light mt-5 mx-1" href="{% url 'play_song' song.id %}"><i class="fa fa-play" aria-hidden="true"></i></a>
-                    <a class="btn btn-outline-light mt-5 mx-1" href="{% url 'detail' song.id %}"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
+    {% include 'nav.html' %}
+    <br>
+    <div class="container" style="padding-bottom: 150px;">
+        {% include 'search.html' %}
+        {% if not query_search %}
+            <header class="section-heading">
+                <h5 class="section-title">ALL SONGS</h5>
+            </header>
+            <hr>
+        {% else %}
+            <header class="section-heading">
+                <h5 class="section-title">SEARCH RESULTS</h5>
+            </header>
+            <hr>
         {% endif %}
+
+        <!-- Song list -->
+        <div class="row" style="margin-right: 65px;margin-left:-15px;">
+            {% if songs %}
+                {% for song in songs %}
+                    <div class="col-sm-2 col-md-2" style="padding-bottom: 15px;">
+                        <div class="hovereffect">
+                            <img src="{{ song.thumbnail.url }}" class="img-responsive" height="135" width="135"
+                                 style="border-radius: 8px 8px 8px 8px;">
+                            <div class="overlay">
+                                <a class="btn btn-outline-light mt-5 mx-1" href="{% url 'play_song' song.id %}"><i
+                                        class="fa fa-play" aria-hidden="true"></i></a>
+                                <a class="btn btn-outline-light mt-5 mx-1" href="{% url 'detail' song.id %}"><i
+                                        class="fa fa-info-circle" aria-hidden="true"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
     </div>
-</div>
 
 
-{% if last_played %}
-    {% include 'footer.html' with song=last_played %}
-{% endif %}
+    {% if last_played %}
+        {% include 'footer.html' with song=last_played %}
+    {% endif %}
 {% endblock body %}
